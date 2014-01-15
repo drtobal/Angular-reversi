@@ -1,0 +1,8 @@
+.player{
+    background-color: black;
+    color: white;
+}
+.cpu{
+    background-color: white;
+    color: black;
+}

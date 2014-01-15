@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app="reversi">
+    <head>
+        <script src="app/vendor/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="app/vendor/angular.js" type="text/javascript"></script>
+
+        <script src="app/modules/reversi.js" type="text/javascript"></script>
+
+        <script src="app/controllers/juegoCtrl.js" type="text/javascript"></script>
+
+        <script src="app/services/juegoService.js" type="text/javascript"></script>
+        <link href="app/styles/main.css" type="text/css" rel="stylesheet"/>
+    </head>
+    <body ng-controller="juegoCtrl">
+        <table>
+            <tr ng-repeat="fila in tablero">
+                <td ng-repeat="columna in fila">
+                    <button
+                        ng-class="{player: (columna.value == 1), cpu: (columna.value == 2)}"
+                        >
+                        {{columna.index}}
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

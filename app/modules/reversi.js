@@ -1,0 +1,1 @@
+var reversi = angular.module('reversi', []);
