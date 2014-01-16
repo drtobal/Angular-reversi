@@ -3,13 +3,9 @@ reversi.service('movimientoService', [
     function($rootScope) {
         //-> x
         this.movimientoValido = function(y, x, c) {
-            if (y < 1 || y > 8 || x < 1 || x > 8)
-                return false;
-            if ($rootScope.tablero[y-1][x-1].value !== null)
-                return false;
-            if (this.puedeCapturar(y, x, c) !== true)
-                return false;
-            return true;
+            return (!(y < 0 || y > 7 || x < 0 || x > 7) &&
+                    ($rootScope.tablero[y][x].value === null) &&
+                    this.puedeCapturar(y, x, c));
         };
         this.puedeCapturar = function(y, x, c) {
             for (a = -1; a <= 1; ++a) {
@@ -25,27 +21,19 @@ reversi.service('movimientoService', [
             return false;
         };
         this.puedeCapturarDir = function(y, x, yo, xo, miColor) {
-            console.log((y + yo) + "," + (x + xo));
             var otroColor = (miColor === 0) ? 1 : 0;
-            if (y + yo + yo < 1 || y + yo + yo > 8 || x + xo + xo < 1 || x + xo + xo > 8)
-                return false;
-            console.log('a');
-            if ($rootScope.tablero[y + yo - 1][x + xo - 1].value === null)
-                return false;
-            console.log('b');
-            if ($rootScope.tablero[y + yo - 1][x + xo - 1].value === otroColor) {
-                console.log('d');
-                if ($rootScope.tablero[y + yo + yo - 1][x + xo + xo - 1].value === miColor) {
-                    console.log('e');
-                    return true;
-                }
-                if (this.puedeCapturarDir(y + yo, x + xo, yo, xo, miColor)) {
-                    console.log('f');
-                    return true;
+            return ( !(y + yo + yo < 0 || y + yo + yo > 7 || x + xo + xo < 0 || x + xo + xo > 7) && 
+                    $rootScope.tablero[y + yo][x + xo].value !== null && 
+                    $rootScope.tablero[y + yo][x + xo].value === otroColor &&
+                    ($rootScope.tablero[y + yo + yo][x + xo + xo].value === miColor ||
+                            this.puedeCapturarDir(y + yo, x + xo, yo, xo, miColor)));
+        };
+        this.checkeaMovimientos = function() {
+            for (var y = 0; y < 8; y++) {
+                for (var x = 0; x < 8; x++) {
+                    $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, $rootScope.turno);
                 }
             }
-            console.log('c');
-            return false;
         };
     }
 ]);
