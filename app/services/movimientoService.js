@@ -10,7 +10,7 @@ reversi.service('movimientoService', [
         this.puedeCapturar = function(y, x, c) {
             for (a = -1; a <= 1; ++a) {
                 for (b = -1; b <= 1; ++b) {
-                    if (a !== 0 && b !== 0) {
+                    if (!(a === 0 && b === 0)) {
                         if (this.puedeCapturarDir(y, x, a, b, c)) {
                             return true;
                             break;
@@ -28,29 +28,40 @@ reversi.service('movimientoService', [
                     ($rootScope.tablero[y + yo + yo][x + xo + xo].value === miColor ||
                             this.puedeCapturarDir(y + yo, x + xo, yo, xo, miColor)));
         };
-        this.checkeaMovimientos = function() {
+        this.checkeaMovimientos = function(turno) {
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
-                    $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, parseInt($rootScope.turno));
-                    if ($rootScope.tablero[y][x].puedeMover) {
+                    $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, turno);
+                    if($rootScope.tablero[y][x].puedeMover){
                         console.log($rootScope.tablero[y][x]);
                     }
                 }
             }
         };
-        this.movimientoCPU = function() {
-            var puntajeMaximo = 0.0, mx = 0, my = 0;
+        this.movimientoCPU = function(turno) {
+            var movidas = new Array();
+            var puntajeMaximo = 0, mx = 0, my = 0;
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
-                    var puntaje = this.valorCelda(y, x, parseInt($rootScope.turno));
-                    console.log(y + "," + x + ":" + puntaje);
-                    if (puntaje > puntajeMaximo) {
-                        mx = x;
-                        my = y;
+                    var puntaje = this.valorCelda(y, x, turno);
+                    console.log(puntaje);
+                    if (puntaje === puntajeMaximo) {
+                        movidas.push({
+                            y: y,
+                            x: x,
+                            v: puntaje
+                        });
+                    } else if (puntaje > puntajeMaximo) {
+                        movidas = new Array({
+                            y: y,
+                            x: x,
+                            v: puntaje
+                        });
                         puntajeMaximo = puntaje;
                     }
                 }
             }
+            console.log(movidas);
         };
         this.puntajeEntreDirecciones = function(y, x, yo, xo, miColor) {
             var otroColor = (miColor === 0) ? 1 : 0;
