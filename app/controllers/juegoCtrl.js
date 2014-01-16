@@ -7,6 +7,9 @@ reversi.controller('juegoCtrl', [
             console.log('asdasdasd');
             movimientoService.checkeaMovimientos();
         };
+        $scope.movimientoCPU = function(){
+            movimientoService.movimientoCPU();
+        };
         $scope.cambiaEstado = function(obj){
             switch(obj.value){
                 case 0:

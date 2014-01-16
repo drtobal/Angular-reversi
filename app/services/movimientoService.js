@@ -10,7 +10,7 @@ reversi.service('movimientoService', [
         this.puedeCapturar = function(y, x, c) {
             for (a = -1; a <= 1; ++a) {
                 for (b = -1; b <= 1; ++b) {
-                    if (!(a === 0 && b === 0)) {
+                    if (a !== 0 && b !== 0) {
                         if (this.puedeCapturarDir(y, x, a, b, c)) {
                             return true;
                             break;
@@ -32,23 +32,44 @@ reversi.service('movimientoService', [
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
                     $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, parseInt($rootScope.turno));
-                    if($rootScope.tablero[y][x].puedeMover){
+                    if ($rootScope.tablero[y][x].puedeMover) {
                         console.log($rootScope.tablero[y][x]);
                     }
                 }
             }
         };
-        this.tengoMovimiento = function() {
-            var tengo = false;
+        this.movimientoCPU = function() {
+            var puntajeMaximo = 0.0, mx = 0, my = 0;
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
-                    if (this.movimientoValido(y, x, parseInt($rootScope.turno)))
-                        $rootScope.tablero[y][x].puedeMover = tengo = true;
-                    else
-                        $rootScope.tablero[y][x].puedeMover;
+                    var puntaje = this.valorCelda(y, x, parseInt($rootScope.turno));
+                    console.log(y + "," + x + ":" + puntaje);
+                    if (puntaje > puntajeMaximo) {
+                        mx = x;
+                        my = y;
+                        puntajeMaximo = puntaje;
+                    }
                 }
             }
-            return tengo;
+        };
+        this.puntajeEntreDirecciones = function(y, x, yo, xo, miColor) {
+            var otroColor = (miColor === 0) ? 1 : 0;
+            var resultado = 0;
+            if ($rootScope.tablero[y + yo][x + xo].value === otroColor)
+                resultado = 1 + this.puntajeEntreDirecciones(y + yo, x + xo, yo, xo, miColor);
+            return resultado;
+        };
+        this.valorCelda = function(y, x, c) {
+            var puntaje = 0;
+            if (this.movimientoValido(y, x, c)) {
+                puntaje = 1;
+                for (var a = -1; a <= 1; a++)
+                    for (var b = -1; b <= 1; b++)
+                        if (a !== 0 && b !== 0)
+                            if (this.puedeCapturarDir(y, x, a, b, c))
+                                puntaje += this.puntajeEntreDirecciones(y, x, a, b, c);
+            }
+            return puntaje;
         };
     }
 ]);
