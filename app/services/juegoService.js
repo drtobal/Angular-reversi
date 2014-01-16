@@ -12,11 +12,11 @@ reversi.service('juegoService', [
                         puedeMover: false
                     };
             }
-            $rootScope.tablero[3][3].value = 1;
+            /*$rootScope.tablero[3][3].value = 1;
             $rootScope.tablero[4][4].value = 1;
             $rootScope.tablero[3][4].value = 0;
             $rootScope.tablero[4][3].value = 0;
-            $rootScope.tablero[5][5].value = 0;
+            $rootScope.tablero[5][5].value = 0;*/
             $rootScope.turno = 0;
         };
     }

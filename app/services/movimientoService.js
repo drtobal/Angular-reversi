@@ -22,8 +22,8 @@ reversi.service('movimientoService', [
         };
         this.puedeCapturarDir = function(y, x, yo, xo, miColor) {
             var otroColor = (miColor === 0) ? 1 : 0;
-            return ( !(y + yo + yo < 0 || y + yo + yo > 7 || x + xo + xo < 0 || x + xo + xo > 7) && 
-                    $rootScope.tablero[y + yo][x + xo].value !== null && 
+            return (!(y + yo + yo < 0 || y + yo + yo > 7 || x + xo + xo < 0 || x + xo + xo > 7) &&
+                    $rootScope.tablero[y + yo][x + xo].value !== null &&
                     $rootScope.tablero[y + yo][x + xo].value === otroColor &&
                     ($rootScope.tablero[y + yo + yo][x + xo + xo].value === miColor ||
                             this.puedeCapturarDir(y + yo, x + xo, yo, xo, miColor)));
@@ -31,9 +31,24 @@ reversi.service('movimientoService', [
         this.checkeaMovimientos = function() {
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
-                    $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, $rootScope.turno);
+                    $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, parseInt($rootScope.turno));
+                    if($rootScope.tablero[y][x].puedeMover){
+                        console.log($rootScope.tablero[y][x]);
+                    }
                 }
             }
+        };
+        this.tengoMovimiento = function() {
+            var tengo = false;
+            for (var y = 0; y < 8; y++) {
+                for (var x = 0; x < 8; x++) {
+                    if (this.movimientoValido(y, x, parseInt($rootScope.turno)))
+                        $rootScope.tablero[y][x].puedeMover = tengo = true;
+                    else
+                        $rootScope.tablero[y][x].puedeMover;
+                }
+            }
+            return tengo;
         };
     }
 ]);

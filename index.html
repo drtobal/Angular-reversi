@@ -18,14 +18,15 @@
             <tr ng-repeat="fila in tablero">
                 <td ng-repeat="columna in fila">
                     <button
-                        ng-class="{player: (columna.value == 0), cpu: (columna.value == 1)}"
-                        ng-disabled="!columna.puedeMover"
+                        ng-class="{player: (columna.value == 0), cpu: (columna.value == 1), mueve: columna.puedeMover}"
+                        ng-click="cambiaEstado(columna)"
                         >
                         {{columna.index}}
                     </button>
                 </td>
             </tr>
         </table>
-        turno: {{turno}}
+        <button ng-click="calculaMovimientosDelNegro()">cn</button>
+        turno: <input ng-model="turno"/>
     </body>
 </html>
