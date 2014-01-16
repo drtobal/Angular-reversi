@@ -1,20 +1,23 @@
 reversi.service('juegoService', [
-    function() {
+    '$rootScope',
+    function($rootScope) {
         this.nuevoTablero = function() {
-            var tablero = new Array();
+            $rootScope.tablero = new Array();
             for (x = 0; x < 8; x++) {
-                tablero[x] = new Array();
+                $rootScope.tablero[x] = new Array();
                 for (y = 0; y < 8; y++)
-                    tablero[x][y] = {
+                    $rootScope.tablero[x][y] = {
                         index: x + "." + y,
-                        value: null
+                        value: null,
+                        puedeMover: false
                     };
             }
-            tablero[3][3].value = 2;
-            tablero[4][4].value = 2;
-            tablero[3][4].value = 1;
-            tablero[4][3].value = 1;
-            return tablero;
+            $rootScope.tablero[3][3].value = 1;
+            $rootScope.tablero[4][4].value = 1;
+            $rootScope.tablero[3][4].value = 0;
+            $rootScope.tablero[4][3].value = 0;
+            $rootScope.tablero[5][5].value = 0;
+            $rootScope.turno = 0;
         };
     }
 ]);
