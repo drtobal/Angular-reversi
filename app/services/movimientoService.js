@@ -8,8 +8,8 @@ reversi.service('movimientoService', [
                     this.puedeCapturar(y, x, c));
         };
         this.puedeCapturar = function(y, x, c) {
-            for (a = -1; a <= 1; ++a) {
-                for (b = -1; b <= 1; ++b) {
+            for (var a = -1; a <= 1; ++a) {
+                for (var b = -1; b <= 1; ++b) {
                     if (!(a === 0 && b === 0)) {
                         if (this.puedeCapturarDir(y, x, a, b, c)) {
                             return true;
@@ -32,19 +32,18 @@ reversi.service('movimientoService', [
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
                     $rootScope.tablero[y][x].puedeMover = this.movimientoValido(y, x, turno);
-                    if($rootScope.tablero[y][x].puedeMover){
+                    if ($rootScope.tablero[y][x].puedeMover) {
                         console.log($rootScope.tablero[y][x]);
                     }
                 }
             }
         };
-        this.movimientoCPU = function(turno) {
+        this.movimientoCPU = function(c) {
             var movidas = new Array();
             var puntajeMaximo = 0, mx = 0, my = 0;
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
-                    var puntaje = this.valorCelda(y, x, turno);
-                    console.log(puntaje);
+                    var puntaje = this.valorCelda(y, x, c);
                     if (puntaje === puntajeMaximo) {
                         movidas.push({
                             y: y,
@@ -61,7 +60,10 @@ reversi.service('movimientoService', [
                     }
                 }
             }
-            console.log(movidas);
+            var movida = movidas[this.getRandomArbitary(0, movidas.length - 1)];
+            console.log("-----");
+            console.log(movidas.length);
+            this.realizaMovimiento(movida.y, movida.x, c);
         };
         this.puntajeEntreDirecciones = function(y, x, yo, xo, miColor) {
             var otroColor = (miColor === 0) ? 1 : 0;
@@ -76,11 +78,38 @@ reversi.service('movimientoService', [
                 puntaje = 1;
                 for (var a = -1; a <= 1; a++)
                     for (var b = -1; b <= 1; b++)
-                        if (a !== 0 && b !== 0)
+                        if (!(a === 0 && b === 0))
                             if (this.puedeCapturarDir(y, x, a, b, c))
                                 puntaje += this.puntajeEntreDirecciones(y, x, a, b, c);
             }
             return puntaje;
+        };
+        this.realizaMovimiento = function(y, x, c) {
+            if (this.movimientoValido(y, x, c)) {
+                $rootScope.tablero[y][x].value = c;
+                this.pintaIntermedios(y, x, c);
+            }
+        };
+        this.pintaIntermedios = function(y, x, c) {
+            for (var a = -1; a <= 1; ++a) {
+                for (var b = -1; b <= 1; ++b) {
+                    if (!(a === 0 && b === 0)) {
+                        if (this.puedeCapturarDir(y, x, a, b, c)) {
+                            this.pintaIntermediosDir(y, x, a, b, c);
+                        }
+                    }
+                }
+            }
+        };
+        this.pintaIntermediosDir = function(y, x, yo, xo, miColor) {
+            var otroColor = (miColor === 0) ? 1 : 0;
+            if ($rootScope.tablero[y + yo][x + xo].value === otroColor) {
+                $rootScope.tablero[y + yo][x + xo].value = miColor;
+                this.pintaIntermediosDir(y + yo, x + xo, yo, xo, miColor);
+            }
+        };
+        this.getRandomArbitary = function(min, max) {
+            return parseInt(Math.random() * (max - min) + min);
         };
     }
 ]);
