@@ -3,44 +3,27 @@ reversi.controller('juegoCtrl', [
     function($scope, $rootScope, juegoService, movimientoService) {
         $scope.turno = 1;
         juegoService.nuevoTablero();
-        //movimientoService.checkeaMovimientos();
         $scope.calculaMovimientosDelNegro = function() {
-            //console.log('asdasdasd');
             movimientoService.checkeaMovimientos(parseInt($scope.turno));
-            //movimientoService.movimientoValido(4, 2, 0);
         };
         $scope.movimientoCPU = function() {
             movimientoService.movimientoCPU(parseInt($scope.turno));
             $scope.turno = ($scope.turno === 1) ? 0 : 1;
             $scope.calculaPuntaje();
             $scope.calculaMovimientosDelNegro();
+            $scope.ultimoMovimiento = $rootScope.ultimoMovimiento;
         };
         $scope.blancos = 0;
         $scope.negros = 0;
-        /*$scope.cambiaEstado = function(obj) {
-         switch (obj.value) {
-         case 0:
-         obj.value = 1;
-         break;
-         case 1:
-         obj.value = 0;
-         break;
-         default:
-         obj.value = 0;
-         break;
-         }
-         };*/
-        $rootScope.tablero[3][3].value = 1;
-        $rootScope.tablero[4][4].value = 1;
-        $rootScope.tablero[3][4].value = 0;
-        $rootScope.tablero[4][3].value = 0;
         $scope.realizaMovimiento = function(y, x) {
             movimientoService.realizaMovimiento(y, x, parseInt($scope.turno));
+            $rootScope.ultimoMovimiento = y + "," + x;
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
                     $rootScope.tablero[y][x].puedeMover = false;
                 }
             }
+            $scope.ultimoMovimiento = $rootScope.ultimoMovimiento;
             $scope.turno = ($scope.turno === 1) ? 0 : 1;
             $scope.calculaPuntaje();
         };
@@ -58,6 +41,5 @@ reversi.controller('juegoCtrl', [
         };
         $scope.calculaPuntaje();
         $scope.calculaMovimientosDelNegro();
-        console.log($rootScope.tablero);
     }
 ]);

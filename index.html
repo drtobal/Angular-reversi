@@ -10,7 +10,7 @@
 
         <script src="app/services/juegoService.js" type="text/javascript"></script>
         <script src="app/services/movimientoService.js" type="text/javascript"></script>
-        
+
         <link href="app/styles/main.css" type="text/css" rel="stylesheet"/>
     </head>
     <body ng-controller="juegoCtrl">
@@ -28,8 +28,8 @@
             </tr>
         </table>
         <button ng-click="calculaMovimientosDelNegro()">cn</button>
-        turno: <input ng-model="turno"/>
-        <button ng-click="movimientoCPU()">calcula cpu</button> {{turno}}
+        turno: {{turno}} - ultimo mov {{ultimoMovimiento}}
+        <button ng-click="movimientoCPU()">calcula cpu</button> 
         <br/>
         blancos: {{blancos}}<br/>
         negros: {{negros}}
