@@ -27,6 +27,10 @@ reversi.controller('juegoCtrl', [
             $scope.turno = ($scope.turno === 1) ? 0 : 1;
             $scope.calculaPuntaje();
         };
+        $scope.cambia = function(c, y, x) {
+            console.log(c);
+            c.value = (c.value == 0) ? 1 : 0;
+        };
         $scope.calculaPuntaje = function() {
             $scope.negros = 0;
             $scope.blancos = 0;

@@ -32,7 +32,7 @@ reversi.service('movimientoService', [
         };
         this.movimientoCPU = function(c) {
             var movidas = new Array();
-            var puntajeMaximo = 0, mx = 0, my = 0;
+            var puntajeMaximo = -999, mx = 0, my = 0;
             for (var y = 0; y < 8; y++) {
                 for (var x = 0; x < 8; x++) {
                     var vc = this.valorCelda(y, x, c);
@@ -56,7 +56,7 @@ reversi.service('movimientoService', [
                 }
             }
             if (movidas.length === 0) {
-                console.log('no tiene movimientos');
+                return false;
             }
             var movida = movidas[this.getRandomArbitary(0, movidas.length - 1)];
             console.log("-----");

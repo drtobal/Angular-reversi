@@ -12,10 +12,10 @@ reversi.service('juegoService', [
                         puedeMover: false
                     };
             }
-            $rootScope.tablero[3][3].value = 1;
+            /*$rootScope.tablero[3][3].value = 1;
             $rootScope.tablero[4][4].value = 1;
             $rootScope.tablero[3][4].value = 0;
-            $rootScope.tablero[4][3].value = 0;
+            $rootScope.tablero[4][3].value = 0;*/
             $rootScope.valoresDelTablero = new Array(
                     new Array(100, -10, 11, 6, 6, 11, -10, 100),
                     new Array(-10, -20, 1, 2, 2, 1, -20, -10),
