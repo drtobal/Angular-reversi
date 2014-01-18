@@ -33,5 +33,34 @@
         <br/>
         blancos: {{blancos}}<br/>
         negros: {{negros}}
+        ------------------
+        <ul>
+            <li ng-repeat="m in mov">
+                {{m.v}} - <button ng-click="pasa(m.tablero)">{{m.y}},{{m.x}}</button>
+                <ul ng-repeat="a in m.movidas">
+                    <li>{{a.v}} - <button ng-click="pasa(a.tablero)">{{a.y}},{{a.x}}</button>
+                        <ul ng-repeat="b in a.movidas">
+                            <li>{{b.v}} - <button ng-click="pasa(b.tablero)">{{b.y}},{{b.x}}</button>
+                                <ul ng-repeat="c in b.movidas">
+                                    <li>{{c.v}} - <button ng-click="pasa(c.tablero)">{{c.y}},{{c.x}}</button>
+                                        <ul ng-repeat="d in c.movidas">
+                                            <li>{{d.v}} - <button ng-click="pasa(d.tablero)">{{d.y}},{{d.x}}</button>
+                                                <ul ng-repeat="e in d.movidas">
+                                                    <li>{{e.v}} - <button ng-click="pasa(e.tablero)">{{e.y}},{{e.x}}</button>
+                                                        <ul ng-repeat="f in e.movidas">
+                                                            <li>{{f.v}} - <button ng-click="pasa(f.tablero)">{{f.y}},{{f.x}}</button></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </body>
 </html>
