@@ -39,13 +39,14 @@ reversi.service('movimientoService', [
                     tablero[y][x].puedeMover = this.movimientoValido(y, x, turno, tablero);
         };
         this.movimientoCPU = function(c, tablero) {
-            if (typeof tablero === 'undefined')
-                tablero = JSON.parse(JSON.stringify($rootScope.tablero));
             var prospeccion = 6;
-            var turno = 0;
-            return this.movimiento(c, tablero, turno, prospeccion);
+            $rootScope.mejores = new Array();
+            $rootScope.mejor = -999;
+            var a = this.movimiento(c, c, tablero, 0, prospeccion, 0, 0);
+            console.log($rootScope.mejores);
+            return a;
         };
-        this.movimiento = function(c, tablero, turno, prospeccion) {
+        this.movimiento = function(miColor, c, tablero, turno, prospeccion, sum, origen) {
             if (turno <= prospeccion) {
                 var movidas = new Array();
                 var puntajeMaximo = -999, mx = 0, my = 0;
@@ -60,7 +61,10 @@ reversi.service('movimientoService', [
                                     x: x,
                                     v: puntaje,
                                     turno: turno,
-                                    tablero: this.realizaMovimiento(y, x, c, JSON.parse(JSON.stringify(tablero)))
+                                    c: c,
+                                    tablero: this.realizaMovimiento(y, x, c, JSON.parse(JSON.stringify(tablero))),
+                                    sum: (miColor == c) ? (sum + puntaje) : (sum - puntaje),
+                                    origen: origen
                                 });
                             } else if (puntaje > puntajeMaximo) {
                                 movidas = new Array({
@@ -68,7 +72,10 @@ reversi.service('movimientoService', [
                                     x: x,
                                     v: puntaje,
                                     turno: turno,
-                                    tablero: this.realizaMovimiento(y, x, c, JSON.parse(JSON.stringify(tablero)))
+                                    c: c,
+                                    tablero: this.realizaMovimiento(y, x, c, JSON.parse(JSON.stringify(tablero))),
+                                    sum: (miColor == c) ? (sum + puntaje) : (sum - puntaje),
+                                    origen: origen
                                 });
                                 puntajeMaximo = puntaje;
                             }
@@ -80,17 +87,26 @@ reversi.service('movimientoService', [
                 } else {
                     ++turno;
                     for (var x = 0 in movidas) {
+                        if (turno === 1) {
+                            origen = x;
+                        }
                         var nTablero = this.realizaMovimiento(movidas[x].y, movidas[x].x, c, JSON.parse(JSON.stringify(tablero)));
-                        movidas[x].movidas = this.movimiento(((c == 1) ? 0 : 1), nTablero, turno, prospeccion);
+                        movidas[x].movidas = this.movimiento(miColor, ((c == 1) ? 0 : 1), nTablero, turno, prospeccion, movidas[x].sum, origen);
                     }
                 }
-                console.log(movidas);
-                /*var movida = movidas[this.getRandomArbitary(0, movidas.length - 1)];
-                 console.log("-----");
-                 console.log(movidas);
-                 console.log(movida);
-                 this.realizaMovimiento(movida.y, movida.x, c);
-                 $rootScope.ultimoMovimiento = movida.y + "," + movida.x;*/
+            } else {
+                if(sum > $rootScope.mejor){
+                    $rootScope.mejores = new Array({
+                        origen: origen,
+                        sum: sum
+                    });
+                    $rootScope.mejor = sum;
+                } else if(sum == $rootScope.mejor){
+                    $rootScope.mejores.push({
+                        origen: origen,
+                        sum: sum
+                    });
+                }
             }
             return movidas;
         };
@@ -119,8 +135,6 @@ reversi.service('movimientoService', [
             return puntaje;
         };
         this.realizaMovimiento = function(y, x, c, tablero) {
-            if (typeof tablero === 'undefined')
-                tablero = $rootScope.tablero;
             if (this.movimientoValido(y, x, c, tablero)) {
                 tablero[y][x].value = c;
                 tablero = this.pintaIntermedios(y, x, c, tablero);

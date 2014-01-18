@@ -28,7 +28,7 @@
         </table>
         <!----ng-disabled="!columna.puedeMover" - ng-click="realizaMovimiento($parent.$index, $index)"-->
         <button ng-click="calculaMovimientosDelNegro()">cn</button>
-        turno: {{turno}} - ultimo mov {{ultimoMovimiento}}
+        turno: <input ng-model="turno"/> {{turno}} - ultimo mov {{ultimoMovimiento}}<br/>
         <button ng-click="movimientoCPU()">calcula cpu</button> 
         <br/>
         blancos: {{blancos}}<br/>
@@ -48,7 +48,7 @@
                                                 <ul ng-repeat="e in d.movidas">
                                                     <li>{{e.v}} - <button ng-click="pasa(e.tablero)">{{e.y}},{{e.x}}</button>
                                                         <ul ng-repeat="f in e.movidas">
-                                                            <li>{{f.v}} - <button ng-click="pasa(f.tablero)">{{f.y}},{{f.x}}</button></li>
+                                                            <li>{{f.v}} - <button ng-click="pasa(f.tablero)">{{f.y}},{{f.x}} + {{f.sum}}</button></li>
                                                         </ul>
                                                     </li>
                                                 </ul>

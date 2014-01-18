@@ -7,11 +7,13 @@ reversi.controller('juegoCtrl', [
             movimientoService.checkeaMovimientos(parseInt($scope.turno), $rootScope.tablero);
         };
         $scope.movimientoCPU = function() {
-            $scope.mov = movimientoService.movimientoCPU(parseInt($scope.turno));
-            /*$scope.turno = ($scope.turno === 1) ? 0 : 1;
+            $scope.mov = movimientoService.movimientoCPU(parseInt($scope.turno), JSON.parse(JSON.stringify($rootScope.tablero)));
+            var a = $scope.mov[parseInt($rootScope.mejores[movimientoService.getRandomArbitary(0, $rootScope.mejores.length)].origen)];
+            $rootScope.tablero = movimientoService.realizaMovimiento(a.y, a.x, $scope.turno, JSON.parse(JSON.stringify($rootScope.tablero)));
+            $scope.turno = ($scope.turno === 1) ? 0 : 1;
             $scope.calculaPuntaje();
             $scope.calculaMovimientosDelNegro();
-            $scope.ultimoMovimiento = $rootScope.ultimoMovimiento;*/
+            $scope.ultimoMovimiento = a.y + "," + a.x;
         };
         $scope.blancos = 0;
         $scope.negros = 0;
@@ -42,7 +44,7 @@ reversi.controller('juegoCtrl', [
                 }
             }
         };
-        $scope.pasa = function(tablero){
+        $scope.pasa = function(tablero) {
             $rootScope.tablero = tablero;
         };
         $scope.calculaPuntaje();
