@@ -4,7 +4,7 @@ reversi.controller('juegoCtrl', [
         $scope.turno = 1;
         juegoService.nuevoTablero();
         $scope.calculaMovimientosDelNegro = function() {
-            movimientoService.checkeaMovimientos(parseInt($scope.turno));
+            movimientoService.checkeaMovimientos(parseInt($scope.turno), $rootScope.tablero);
         };
         $scope.movimientoCPU = function() {
             movimientoService.movimientoCPU(parseInt($scope.turno));
